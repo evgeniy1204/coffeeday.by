@@ -1,0 +1,267 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block content %}
+<section class="content-header">
+  <h1>
+    {{ bar.title }}
+  </h1>
+</section>
+<div class="loading_ajax">
+  <i class="fa fa-refresh fa-spin"></i>
+</div>
+<section class="content">
+  <div class="row">
+    <div class="col-lg-8">
+      <form class="form-inline">
+          <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar"></i>
+                </div>
+                <input type="text" class="form-control start_date1" data-inputmask="'alias': 'yyyy/mm/dd'" >
+              </div><!-- /.input group -->
+          </div>
+          <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar"></i>
+                </div>
+                <input type="text" class="form-control end_date2" data-inputmask="'alias': 'yyyy/mm/dd'" data-mask="">
+              </div><!-- /.input group -->
+          </div>
+          <button type="button" class="btn btn-info btn-flat filter" data-bar="{{ bar.id }}">Показать выручку</button>
+      </form>
+      </div>
+      <div class="col-md-4 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text" id="date">Выручка за сегодня</span>
+          <span class="info-box-number" id="sales">{% if total is empty %} 0 {% else %} {{ total }} {% endif %}</span>
+        </div><!-- /.info-box-content -->
+      </div><!-- /.info-box -->
+    </div>
+  </div>
+  
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-body">
+                    <div class="box-body table-responsive no-padding">
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr>
+                                    <th>Бариста</th>
+                                    <th>Продаж</th>
+                                    <th>Выручка</th>
+                                </tr>
+                                {% for item in earnings %}
+                                <tr>
+                                    <td>{{ item.check.user.name }} {{ item.check.user.surname }}</td>
+                                    <td> {{ item.count_earning }} </td>
+                                    <td> {{ item.total }} </td>
+                                </tr>
+                                {% endfor %}
+                                
+                            </tbody>
+                        </table>
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="box box-default">
+            <div class="box-header with-border">
+              <h3 class="box-title">Статистика по проданным товарам</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                        <label>Выберите товар</label>
+                        <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                          {% for item in products %}
+                            <option data-id="{{item.id}}">{{item.name}}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                          <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                          </div>
+                          <input type="text" class="form-control start_date" data-inputmask="'alias': 'yyyy/mm/dd'" required>
+                        </div><!-- /.input group -->
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                          <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                          </div>
+                          <input type="text" class="form-control end_date" data-inputmask="'alias': 'yyyy/mm/dd'" data-mask="">
+                        </div><!-- /.input group -->
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-info btn-flat margin show_product">Показать</button>
+                    </div>
+                  </div><!-- /.form-group -->
+                </div><!-- /.col -->
+              </div><!-- /.row -->
+            </div><!-- /.box-body -->
+          </div>
+          <div class="col-lg-6">
+            <div class="show_prod">
+            
+            </div>
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <form class="form-inline">
+          <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar"></i>
+                </div>
+                <input type="text" class="form-control start_date3" data-inputmask="'alias': 'yyyy/mm/dd'" >
+              </div><!-- /.input group -->
+          </div>
+          <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar"></i>
+                </div>
+                <input type="text" class="form-control end_date3" data-inputmask="'alias': 'yyyy/mm/dd'" data-mask="">
+              </div><!-- /.input group -->
+          </div>
+          <button type="button" class="btn btn-info btn-flat filter_product" data-bar="{{ bar.id }}">Показать статистику по продажам</button>
+      </form>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            {% if salesProduct %}
+            <div class="box">
+                <div class="box-body table-responsive no-padding" id="result_product">
+                  {% include 'AppBundle:Bar:sales_product.html.twig' %}
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+            {% else %}
+            <p>Продаж выбранного товара в данном баре не было.</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        {{ form_start(delete_form) }}
+            <button type="submit" class="btn btn-danger btn-flat margin">Удалить бар</button>
+        {{ form_end(delete_form) }}
+    </div>
+</section>
+{% endblock %}
+{% block javascripts %}
+<script>
+    (function(){
+        $('.start_date').daterangepicker({
+                            format: 'YYYY-MM-DD',
+                            singleDatePicker: true
+                        });
+        $('.end_date').daterangepicker({
+                            format: 'YYYY-MM-DD',
+                            singleDatePicker: true
+                        });
+        $('.end_date2').daterangepicker({
+                            format: 'YYYY-MM-DD',
+                            singleDatePicker: true
+                        });
+        $('.start_date1').daterangepicker({
+                            format: 'YYYY-MM-DD',
+                            singleDatePicker: true
+                        });
+        $('.end_date3').daterangepicker({
+                            format: 'YYYY-MM-DD',
+                            singleDatePicker: true
+                        });
+        $('.start_date3').daterangepicker({
+                            format: 'YYYY-MM-DD',
+                            singleDatePicker: true
+                        });
+
+        $(".show_product").on("click", function() {
+            var start = $('.start_date').val();
+            var end = $('.end_date').val();
+            var product = $(".select2 option:selected").data("id");
+            var url = "{{ path('stat_product', {'id' : bar.id}) }}";
+            var data = {
+                          'product' : product,
+                          'start_date'  : start,
+                          'end_date'    : end
+                        };
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                success: function(data) {
+                    $(".show_prod").html(data);
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+        })
+
+        $(".filter").on("click", function() {
+            $(".loading_ajax").fadeIn(100);
+            var url = "{{ path('bar_sales')}}";
+            var start, end;
+            start = $('.start_date1').val();
+            end = $('.end_date2').val();
+            var data = {
+                          'start_date'  : start,
+                          'end_date'    : end,
+                          'bar'         : $(this).data("bar")
+                        };
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                success: function(data) {
+                    $("#sales").html(data);
+                    $("#date").html("Выручка с " + start + " до " + end);
+                    $(".loading_ajax").fadeOut(100);
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+        });
+
+        $(".filter_product").on("click", function() {
+            $(".loading_ajax").fadeIn(100);
+            var url = "{{ path('bar_sales_produt')}}";
+            var start, end;
+            start = $('.start_date3').val();
+            end = $('.end_date3').val();
+            var data = {
+                          'start_date'  : start,
+                          'end_date'    : end,
+                          'bar'         : $(this).data("bar")
+                        };
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                success: function(data) {
+                    $("#result_product").html(data);
+                    $(".loading_ajax").fadeOut(100);
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+        });
+
+    })();
+</script>
+{% endblock %}

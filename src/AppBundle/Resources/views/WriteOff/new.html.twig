@@ -1,0 +1,30 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block content %}
+<section class="content-header">
+  <h1>
+    Списание
+  </h1>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+              <!-- Horizontal Form -->
+            <div class="box box-info">
+                <!-- form start -->
+                <div class="box-body">
+                    {{ form_start(form) }}
+                        {{ form_widget(form) }}
+                        <div class="box-footer">
+                            <input type="submit" value="Сохранить" class="btn btn-info pull-right" />
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+                <div class="box-footer">
+                    <a href="{{ path('writeoff_index') }}"><button class="btn bg-purple btn-flat margin">Просмотреть все</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

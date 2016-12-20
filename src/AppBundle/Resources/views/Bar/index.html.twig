@@ -1,0 +1,34 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block content %}
+<section class="content-header">
+  <h1>
+    Бары
+  </h1>
+</section>
+<section class="content">
+  <!-- Small boxes (Stat box) -->
+    <div class="row">
+  {% if earnings is defined %}
+    {% for item in earnings %}
+        <div class="col-lg-4 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-aqua">
+            <div class="inner">
+                <h3> {{ item.total }} </h3>
+              <p> {{ item.bar.title }} </p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-bag"></i>
+            </div>
+            <a href="{{ path('bar_show', {'id' : item.bar.id}) }}" class="small-box-footer">Вся статистика <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div><!-- ./col -->
+    {% endfor %}
+{% endif %}
+    </div>
+    <div class="box-footer">
+        <a href="{{ path('bar_new') }}"><button type="byutton" class="btn btn-info pull-right" /> Добавить бар </button></a>
+    </div>
+</section>
+{% endblock %}

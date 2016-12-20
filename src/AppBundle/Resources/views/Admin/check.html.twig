@@ -1,0 +1,111 @@
+{% extends 'AppBundle::base.html.twig' %}
+{% block content %}
+<section class="content-header">
+  <h1>
+    Чеки
+  </h1>
+</section>
+<div class="loading_ajax">
+  <i class="fa fa-refresh fa-spin"></i>
+</div>
+<section class="content">
+<div class="row">
+<form class="form-inline">
+    <div class="form-group">
+        <button type="button" class="btn bg-maroon btn-flat margin filter" data-filter="month">За месяц</button>
+    </div>
+    <div class="form-group">
+        <button type="button" class="btn bg-orange btn-flat margin filter" data-filter="week">За неделю</button>
+    </div>
+    <div class="form-group">
+        <button type="button" class="btn bg-olive btn-flat margin filter" data-filter="today">Сегодня</button>
+    </div>
+    <div class="form-group">
+        <div class="input-group">
+          <div class="input-group-addon">
+            <i class="fa fa-calendar"></i>
+          </div>
+          <input type="text" class="form-control start_date" data-inputmask="'alias': 'yyyy/mm/dd'" >
+        </div><!-- /.input group -->
+    </div>
+    <div class="form-group">
+        <div class="input-group">
+          <div class="input-group-addon">
+            <i class="fa fa-calendar"></i>
+          </div>
+          <input type="text" class="form-control end_date" data-inputmask="'alias': 'yyyy/mm/dd'" data-mask="">
+        </div><!-- /.input group -->
+    </div>
+    <button type="button" class="btn btn-info btn-flat filter">Показать</button>
+</form>
+<div id="checks">
+  {% include 'AppBundle:Admin:checksFilter.html.twig' %}
+</div>
+  </div>
+</section>
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+  (function(){
+        $('.start_date').daterangepicker({
+                            format: 'YYYY-MM-DD',
+                            singleDatePicker: true
+                        });
+        $('.end_date').daterangepicker({
+                            format: 'YYYY-MM-DD',
+                            singleDatePicker: true
+                        });
+
+        $(".filter").on("click", function() {
+            $(".loading_ajax").fadeIn(100);
+            var url = "{{ path('check') }}";
+            var start, end;
+            if (!$(this).data("filter")) {
+              start = $('.start_date').val();
+              end = $('.end_date').val();
+            }
+            
+            var data = {
+                          'filter'      : true,
+                          'button'      : $(this).data("filter"),
+                          'start_date'  : start,
+                          'end_date'    : end
+                        };
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                success: function(data) {
+                    $("#checks").html(data);
+                    $(".loading_ajax").fadeOut(100);
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+        });
+        
+        $(".fa-close").on("click", function() {
+            $(".loading_ajax").fadeIn(100);
+            var url = "{{ path('check_delete') }}";
+            var check = $(this).data("id");
+          
+            var data = {
+                          'check' : check,
+                        };
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                success: function(data) {
+                    $("#checks").html(data);
+                    $(".loading_ajax").fadeOut(100);
+                },
+                error: function(data) {
+                    sweetAlert("Ошибка", "Возникла какая-то ошибка, попробуйте еще раз", "error");
+                }
+            });
+        });
+    })();
+</script>
+{% endblock %}

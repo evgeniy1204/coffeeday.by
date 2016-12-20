@@ -1,0 +1,14 @@
+{% for name, recept in recepts %}
+    <div class="col-md-12">
+      <div class="box box-default">
+        <div class="box-body">
+        <ul>
+       {% for item in recept.recept %}
+           <li> {{ item.ingredient }}({{ item.type }}) - {{ item.count }} </li>
+       {% endfor %}
+       </ul>
+       <p>Стоимость: {{recept.cost }}  </p>
+        </div><!-- /.box-body -->
+      </div><!-- /.box -->
+    </div><!-- /.col -->
+{% endfor %}

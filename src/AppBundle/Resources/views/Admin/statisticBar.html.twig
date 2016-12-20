@@ -1,0 +1,29 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block content %}
+<section class="content-header">
+  <h1>
+    CRM Coffee
+  </h1>
+</section>
+<section class="content">
+  <!-- Small boxes (Stat box) -->
+  	<div class="row">
+  	{% for bar in bars %}
+  	    <div class="col-lg-4 col-xs-6">
+	      <!-- small box -->
+	      <div class="small-box bg-aqua">
+	        <div class="inner">
+	          <h3>150</h3>
+	          <p> {{ bar.title }} </p>
+	        </div>
+	        <div class="icon">
+	          <i class="ion ion-bag"></i>
+	        </div>
+	        <a href="{{ path('bar_show', {'id' : bar.id}) }}" class="small-box-footer">Вся статистика <i class="fa fa-arrow-circle-right"></i></a>
+	      </div>
+	    </div><!-- ./col -->
+  	{% endfor %}
+	</div>
+</section>
+{% endblock %}

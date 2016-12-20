@@ -1,0 +1,71 @@
+{% if checks %}
+<div class="my_check">
+	{% for check in checks %}
+	    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+	      <div class="box box-primary direct-chat direct-chat-primary">
+	        <div class="box-header with-border">
+	          <h3 class="box-title"> {{ check.user.name }} {{ check.user.surname }} </h3> {% if is_granted('ROLE_ADMIN') %}<span class="fa fa-close" data-id="{{check.id}}" data-user="{{user.id}}"></span>{% endif %} 
+	        </div><!-- /.box-header -->
+	        <div class="box-body">
+	          <div class="direct-chat-messages">
+	              {% for item in check.bin %}
+	                <div class="product_price">
+	                  <p class="product">{{ loop.index }}) {{ item.product.name }} </p>
+	                  <p class="price"> {% if item.isFree %} бесплатно {% else %} {{ item.product.cost }} BYN{% endif %}    </p>
+	                </div>
+	              {% endfor %}
+	              
+	          </div><!--/.direct-chat-messages-->
+	        </div><!-- /.box-body -->
+	        <div class="box-footer">
+	          <div class="total">
+	            <div class="product_price">
+	                <p class="product">Итого: </p>
+	                <p class="price">{{ check.total }} BYN</p>
+	            </div>
+	            <div class="product_price">
+	                <p class="product">Дата: </p>
+	                <p class="price">{{ check.created|date('Y-m-d / H:i:s') }}</p>
+	            </div>
+	          </div>
+	        </div><!-- /.box-footer-->
+	      </div><!--/.direct-chat -->
+	    </div>
+	{% endfor %}
+</div>
+{% else %}
+<div class="row">
+    <div class="col-xs-12">
+		<p>Не найдено</p>
+	</div>
+</div>
+{% endif %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+  (function(){
+        $(".fa-close").on("click", function() {
+            $(".loading_ajax").fadeIn(100);
+            var url = "{{ path('check_delete') }}";
+            var check = $(this).data("id");
+          	var user = $(this).data('user');
+            var data = {
+                          'check' : check,
+                          'user'  : user
+                        };
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                success: function(data) {
+                    $(".my_check").html(data);
+                    $(".loading_ajax").fadeOut(100);
+                },
+                error: function(data) {
+                    sweetAlert("Ошибка", "Возникла какая-то ошибка, попробуйте еще раз", "error");
+                }
+            });
+        });
+    })();
+</script>
+{% endblock %}

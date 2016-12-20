@@ -1,0 +1,57 @@
+{% if receptionsIsGroup is defined %}
+<div class="col-xs-12">
+    <div class="box">
+    <p>Общие данные для выгрузки в Exel</p>
+        <div class="box-body table-responsive no-padding">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Наименование</th>
+                        <th>Количество</th>
+                    </tr>
+                </thead>
+                <tbody>
+            	{% for reception in receptionsIsGroup %}
+            	    <tr>
+            	        <td>{{ reception.0.id }}</td>
+            	        <td>{{ reception.0.stock.ingredient.name }}</td>
+            	        <td>{{ reception.count_prod }} {{ reception.0.stock.ingredient.type }}</td> 
+            	    </tr>
+            	{% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>  
+{% endif %}
+
+{% if receptions is defined %}
+<div class="col-xs-12">
+    <div class="box">
+    <p>Подробные данные</p>
+        <div class="box-body table-responsive no-padding">
+            <table class="table table-hover">
+                <thead style="margin-top: 50px;">
+                    <tr>
+                        <th>Id</th>
+                        <th>Наименование</th>
+                        <th>Количество</th>
+                        <th>Бариста</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in receptions %}
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.stock.ingredient.name }}</td>
+                            <td>{{ item.count }} {{ item.stock.ingredient.type }}</td>
+                            <td>{{ item.user.name }} {{ item.user.surname }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endif %}

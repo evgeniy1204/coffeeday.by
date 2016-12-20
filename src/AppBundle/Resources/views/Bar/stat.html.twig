@@ -1,0 +1,26 @@
+{% if products %}
+<div class="box">
+    <div class="box-body table-responsive no-padding">
+      <table class="table table-hover">
+        <tr>
+          <th>ID</th>
+          <th>Товар</th>
+          <th>Количество продаж</th>
+          <th>Сумма с продаж</th>
+        </tr>
+        {% for item in products %}
+        <tr>
+          <td>{{ item.0.product.id }}</td>
+          <td>{{ item.0.product.name }}</td>
+          <td>{{ item.sales }}</td>
+          <td>{{ item.total }}</td>
+        </tr>
+        {% endfor %}
+        
+      </table>
+    </div><!-- /.box-body -->
+</div><!-- /.box -->
+{% else %}
+<p>Продаж выбранного товара в данном баре не было.</p>
+{% endif %}
+

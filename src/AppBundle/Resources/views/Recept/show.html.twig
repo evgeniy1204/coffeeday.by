@@ -1,0 +1,40 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block content %}
+    <h1>Recept</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ recept.id }}</td>
+            </tr>
+            <tr>
+                <th>Count</th>
+                <td>{{ recept.count }}</td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{% if recept.created %}{{ recept.created|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>{% if recept.updated %}{{ recept.updated|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('recept_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('recept_edit', { 'id': recept.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

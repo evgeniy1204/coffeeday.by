@@ -1,0 +1,92 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block content %}
+<section class="content-header">
+  <h1>
+    Продажи
+  </h1>
+</section>
+<div class="loading_ajax">
+  <i class="fa fa-refresh fa-spin"></i>
+</div>
+<section class="content">
+	<div class="row">
+		<div class="col-md-8">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                {% set active = 1 %}
+                {% for category in categories %}
+                 	<li {% if active %} class="active" {% endif %}><a href="#{{ category.id }}" data-toggle="tab" aria-expanded="false">{{ category.title }}</a></li>
+                 	{% set active = 0 %}
+                {% endfor %}
+                <li><a href="#free" data-toggle="tab" aria-expanded="false">7-ой бесплатно</a></li>
+                </ul>
+                <div class="tab-content">
+                {% set active = 1 %}
+                {% for item in categories %}
+                    <div class="tab-pane {% if active %}active {% endif %}" id="{{ item.id }}">
+                	    {% for product in item.product %}
+                            {% if product.recept is not empty %}
+	                		<button class="btn bg-purple btn-flat margin send-bin" data-id="{{ product.id }}" data-free="0">{{ product.name }}</button>
+                            {% endif %}
+	                    {% set active = 0 %}
+                	    {% endfor %}
+                	</div><!-- /.tab-pane -->
+                    {% if item.title == 'Кофе' %}
+                    <div class="tab-pane" id="free">
+                        {% for product in item.product %}
+                            {% if product.recept is not empty %}
+                            <button class="btn bg-purple btn-flat margin send-bin" data-id="{{ product.id }}" data-free="1" data-cost="0">{{ product.name }}</button>
+                            {% endif %}
+                        {% endfor %}
+                    </div><!-- /.tab-pane -->
+                    {% endif %}
+                {% endfor %}
+                </div><!-- /.tab-content -->
+            </div><!-- nav-tabs-custom -->
+        </div>
+		<div class="col-md-4">
+             <!-- DIRECT CHAT PRIMARY -->
+             <div class="card">
+               {% include 'AppBundle:Bin:card.html.twig' %}
+             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Выручка за день</span>
+                  <span class="info-box-number">{{ profit }}</span>
+                </div><!-- /.info-box-content -->
+            </div><!-- /.info-box -->
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+	$(".send-bin").click(function(){
+        $(".loading_ajax").fadeIn(100);
+        var url = "{{ path('bin_new') }}";
+        var data = {
+                        'add_to_card' : $(this).data("id"),
+                        'is_free' : $(this).data("free"),
+                        'cost' : $(this).data("cost")
+                    };
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            success: function(data){
+                $(".card").html(data);
+                $(".loading_ajax").fadeOut(100);
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        });
+    });
+</script>
+{% endblock %}

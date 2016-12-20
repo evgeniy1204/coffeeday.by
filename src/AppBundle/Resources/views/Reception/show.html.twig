@@ -1,0 +1,41 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block content %}
+<section class="content">
+    <h1>Reception</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ reception.id }}</td>
+            </tr>
+            <tr>
+                <th>Count</th>
+                <td>{{ reception.count }}</td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{% if reception.created %}{{ reception.created|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>{% if reception.updated %}{{ reception.updated|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('reception_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('reception_edit', { 'id': reception.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

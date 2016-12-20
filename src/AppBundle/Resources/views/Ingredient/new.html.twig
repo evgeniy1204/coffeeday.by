@@ -1,0 +1,27 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block content %}
+<section class="content-header">
+  <h1>
+    Добавление нового ингредиента
+  </h1>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+              <!-- Horizontal Form -->
+            <div class="box box-info">
+                <!-- form start -->
+                <div class="box-body">
+                    {{ form_start(form) }}
+                        {{ form_widget(form) }}
+                        <div class="box-footer">
+                            <input type="submit" value="Добавить" class="btn btn-info pull-right" />
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

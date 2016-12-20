@@ -1,0 +1,39 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block content %}
+<section class="content-header">
+  <h1>
+    Информация о складе
+  </h1>
+</section>
+    <table>
+        <tbody>
+            <tr>
+                <th>Name</th>
+                <th>Count</th>
+                <th>Type</th>
+            <tr>
+                <th>Created</th>
+                <td>{% if stock.created %}{{ stock.created|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>{% if stock.updated %}{{ stock.updated|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('stock_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('stock_edit', { 'id': stock.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

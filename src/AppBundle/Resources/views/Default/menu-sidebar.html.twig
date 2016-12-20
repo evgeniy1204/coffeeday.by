@@ -1,0 +1,120 @@
+<aside class="main-sidebar">
+  <!-- sidebar: style can be found in sidebar.less -->
+  <section class="sidebar">
+    <!-- Sidebar user panel -->
+    <div class="user-panel">
+      <div class="pull-left image">
+        <!-- <img src="" class="img-circle" alt="User Image"> -->
+      </div>
+      <div class="pull-left info">
+        <p></p>
+      </div>
+    </div>
+    <!-- /.search form -->
+    <!-- sidebar menu: : style can be found in sidebar.less -->
+   <ul class="sidebar-menu">
+        <li class="header">Main menu</li>
+        {% if is_granted("ROLE_ADMIN") %}
+        <li {% if app.request.get('_route') == 'bar_index' %} class="active" {% endif %}>
+          <a href="{{ path('bar_index') }}">
+            <i class="fa fa-pie-chart"></i>
+            <span>Статистика по барам</span>
+          </a>
+        <li class="treeview{% if app.request.get('_route') == 'product_new' or app.request.get('_route') == 'product_index'%} active{% endif %}">
+          <a href="#">
+            <i class="fa  fa-th-large"></i>
+            <span>Меню</span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu">
+            <li {% if app.request.get('_route') == 'product_new' %} class="active" {% endif %}><a href="{{ path('product_new') }}"><i class="fa fa-circle-o"></i> Добавить в меню</a></li>
+            <li {% if app.request.get('_route') == 'product_index' %} class="active" {% endif %}><a href="{{ path('product_index') }}"><i class="fa fa-circle-o"></i> Просмотр</a></li>
+          </ul>
+        </li>
+        <li class="treeview{% if app.request.get('_route') == 'user_new' or app.request.get('_route') == 'user_index'%} active{% endif %}">
+          <a href="#">
+            <i class="fa  fa-users"></i>
+            <span>Пользователи</span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu">
+            <li {% if app.request.get('_route') == 'user_new' %} class="active" {% endif %}><a href="{{ path('user_new') }}"><i class="fa fa-circle-o"></i> Добавить пользователя</a></li>
+            <li {% if app.request.get('_route') == 'user_index' %} class="active" {% endif %}><a href="{{ path('user_index') }}"><i class="fa fa-circle-o"></i> Все пользователи</a></li>
+          </ul>
+        </li>
+        <li>
+        <li class="treeview{% if app.request.get('_route') == 'category_new' or app.request.get('_route') == 'category_index'%} active{% endif %}">
+          <a href="#">
+            <i class="fa  fa-list-alt"></i>
+            <span>Категории продуктов</span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu">
+            <li {% if app.request.get('_route') == 'category_new' %} class="active" {% endif %}><a href="{{ path('category_new') }}"><i class="fa fa-circle-o"></i> Добавить категорию</a></li>
+            <li {% if app.request.get('_route') == 'category_index' %} class="active" {% endif %}><a href="{{ path('category_index') }}"><i class="fa fa-circle-o"></i> Все категории</a></li>
+          </ul>
+        </li>
+        <li class="treeview{% if app.request.get('_route') == 'ingredient_new' or app.request.get('_route') == 'ingredient_index'%} active{% endif %}">
+          <a href="#">
+            <i class="fa  fa-list-alt"></i>
+            <span>Ингредиенты</span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu">
+            <li {% if app.request.get('_route') == 'ingredient_new' %} class="active" {% endif %}><a href="{{ path('ingredient_new') }}"><i class="fa fa-circle-o"></i> Добавить ингредиент</a></li>
+            <li {% if app.request.get('_route') == 'ingredient_index' %} class="active" {% endif %}><a href="{{ path('ingredient_index') }}"><i class="fa fa-circle-o"></i> Все ингредиенты</a></li>
+          </ul>
+        </li>
+        <li class="treeview{% if app.request.get('_route') == 'stock_new' or app.request.get('_route') == 'stock_index'%} active{% endif %}">
+          <a href="#">
+            <i class="fa fa-archive"></i>
+            <span>Склад</span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu">
+            <li {% if app.request.get('_route') == 'stock_new' %} class="active" {% endif %}><a href="{{ path('stock_new') }}"><i class="fa fa-circle-o"></i> Добавить на склад</a></li>
+            <li {% if app.request.get('_route') == 'stock_index' %} class="active" {% endif %}><a href="{{ path('stock_index') }}"><i class="fa fa-circle-o"></i> Редактирование склада</a></li>
+          </ul>
+        </li>
+        <li {% if app.request.get('_route') == 'recept_index' %} class="active" {% endif %}>
+          <a href="{{ path('recept_index') }}">
+            <i class="fa fa-cutlery"></i>
+            <span>Рецептура</span>
+          </a>
+        </li>
+        <li {% if app.request.get('_route') == 'writeoff_index' %} class="active" {% endif %}>
+          <a href="{{ path('writeoff_index') }}">
+            <i class="fa fa-cutlery"></i>
+            <span>Списанные продукты</span>
+          </a>
+        </li>
+        <li {% if app.request.get('_route') == 'reception_index' %} class="active" {% endif %}>
+          <a href="{{ path('reception_index') }}">
+            <i class="fa fa-cutlery"></i>
+            <span>Принятые продукты</span>
+          </a>
+        </li>
+      {% else %}
+        <li {% if app.request.get('_route') == 'writeoff_new' or app.request.get('_route') == 'writeoff_index' %} class="active" {% endif %}>
+          <a href="{{ path('writeoff_new') }}">
+            <i class="fa fa-toggle-left"></i>
+            <span>Списание</span>
+          </a>
+        </li>
+        <li {% if app.request.get('_route') == 'reception_new' or app.request.get('_route') == 'reception_index' %} class="active" {% endif %}>
+          <a href="{{ path('reception_new') }}">
+            <i class="fa fa-toggle-right"></i>
+            <span>Приёмка</span>
+          </a>
+        </li>
+        <li {% if app.request.get('_route') == 'sale' %} class="active" {% endif %}>
+          <a href="{{ path('sale') }}">
+            <i class="fa fa-money"></i>
+            <span>Продажи</span>
+          </a>
+        </li>
+       {% endif %}
+    </ul>
+  </section>
+  <!-- /.sidebar -->
+</aside>

@@ -1,0 +1,70 @@
+<div class="box-body table-responsive no-padding">
+  <table class="table table-hover">
+      <tbody>
+          <tr>
+              <th>Ингредиент</th>
+              <th>Количество</th>
+              <th>Тип</th>
+              <th>Действия</th>
+          </tr>
+          {% for item in recepts %}
+          <tr>
+              <td> {{ item.ingredient }} </td>
+              <td> {{ item.count }} </td>
+              <td> {{ item.type }} </td>
+              <td> <button type="button" class="btn btn-flat margin btn-success recept_edit" data-id="{{ item.id }}">Редактировать</button> </td>
+          </tr>
+          {% endfor %}
+          
+      </tbody>
+  </table>
+</div><!-- /.box-body -->
+{% block javascripts %}
+    <script type="text/javascript">
+    $(".recept_edit").on("click", function(){
+      var count = 0;
+      var url = "{{ path('recept_custom_edit') }}";
+      var id = $(this).data("id");
+      
+        swal({   
+          title: "",   
+          text: "Введите новое значение",   
+          type: "input",
+          html: true,
+          showCancelButton: true,   
+          closeOnConfirm: false,   
+          animation: "slide-from-top",  
+          showLoaderOnConfirm: true,
+          inputPlaceholder: "Write something" }, 
+          function(inputValue) {   
+            if (inputValue === false) return false;      
+            if (inputValue === "") {     
+              swal.showInputError("You need to write something!");     
+              return false   
+            }
+
+            var data = {
+                    'id'    : id,
+                    'count' : inputValue,
+                    'product' : {{product.id}}
+                };
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                success: function(data){
+                    $(".recept").html(data);
+                    swal("Сохранено!", "Количество изменено на: " + inputValue, "success"); 
+                    $(".loading_ajax").fadeOut(100);
+
+                },
+                error: function(data) {
+                    sweetAlert("Ошибка", "Возникла какая-то ошибка, попробуйте еще раз", "error");
+                }
+            });
+        });
+    });
+      
+    </script>
+{% endblock %}

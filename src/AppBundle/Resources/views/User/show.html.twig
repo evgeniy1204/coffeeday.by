@@ -1,0 +1,120 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block content %}
+<section class="content-header">
+  <h1>
+    Информация о пользователе
+  </h1>
+</section>
+<div class="loading_ajax">
+  <i class="fa fa-refresh fa-spin"></i>
+</div>
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title">Бариста</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body no-padding">
+                  <table class="table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Имя</th>
+                        <th>Фамилия</th>
+                        <th>Действия</th>
+                    </tr>
+                    <tr>
+                        <td><a href="{{ path('user_show', { 'id': user.id }) }}">{{ user.id }}</a></td>
+                        <td><a href="{{ path('user_show', { 'id': user.id }) }}">{{ user.name }}</a></td>
+                        <td><a href="{{ path('user_show', { 'id': user.id }) }}">{{ user.surname }}</a></td>
+                        <td>
+                            <a href="{{ path('user_edit', { 'id': user.id }) }}"><button class="btn bg-purple btn-flat margin">Редактировать</button></a>
+                            {{ form_start(delete_form) }}
+                                <button type="submit" class="btn bg-purple btn-flat margin">Удалить</button>
+                            {{ form_end(delete_form) }}
+                        </td>
+                    </tr>
+                  </table>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        </div>
+    </div>
+    <div class="row">
+        <form class="form-inline">
+            <div class="form-group">
+                <button type="button" class="btn bg-maroon btn-flat margin filter" data-filter="month">За месяц</button>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn bg-orange btn-flat margin filter" data-filter="week">За неделю</button>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn bg-olive btn-flat margin filter" data-filter="today">Сегодня</button>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                  <input type="text" class="form-control start_date" data-inputmask="'alias': 'yyyy/mm/dd'" >
+                </div><!-- /.input group -->
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                  <input type="text" class="form-control end_date" data-inputmask="'alias': 'yyyy/mm/dd'" data-mask="">
+                </div><!-- /.input group -->
+            </div>
+            <button type="button" class="btn btn-info btn-flat filter">Показать</button>
+        </form>
+        <div id="checks">
+          {% include 'AppBundle:Admin:checksFilter.html.twig' %}
+        </div>
+  </div>
+</section>
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+  (function(){
+        $('.start_date').daterangepicker({
+                            format: 'YYYY-MM-DD',
+                            singleDatePicker: true
+                        });
+        $('.end_date').daterangepicker({
+                            format: 'YYYY-MM-DD',
+                            singleDatePicker: true
+                        });
+
+        $(".filter").on("click", function() {
+            $(".loading_ajax").fadeIn(100);
+            var url = "{{ path('user_show', {id: user.id}) }}";
+            var start, end;
+            if (!$(this).data("filter")) {
+              start = $('.start_date').val();
+              end = $('.end_date').val();
+            }
+            
+            var data = {
+                          'filter'      : true,
+                          'button'      : $(this).data("filter"),
+                          'start_date'  : start,
+                          'end_date'    : end
+                        };
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                success: function(data) {
+                    $("#checks").html(data);
+                    $(".loading_ajax").fadeOut(100);
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+        });
+    })();
+</script>
+{% endblock %}

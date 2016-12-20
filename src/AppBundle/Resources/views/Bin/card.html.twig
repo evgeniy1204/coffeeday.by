@@ -1,0 +1,93 @@
+<div class="box box-primary direct-chat direct-chat-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">Чек <a href="{{path('check')}}" class="checks"><button type="button" class="btn btn-primary btn-flat">Чеки</button></a></h3>
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        <div class="direct-chat-messages">
+        {% if products is defined %}
+            {% for item in products %}
+                <div class="product_price">
+                    <p class="product">{{ loop.index }}) {{item.name}}</p>
+                    <p class="price"> {#{% if is_free is defined and is_free %} 0 {% else %}#} {{item.cost}} {#{% endif %} #} BYN <span class="fa fa-close" data-id="{{item.id}}"></span></p>
+                </div>
+            {% endfor %}
+        {% endif %}
+        </div><!--/.direct-chat-messages-->
+        {% if total is defined %}
+        <div class="total">
+            <div class="product_price">
+                <p class="product">Итого: </p>
+                <p class="price">{{total}} BYN</p>
+            </div>
+        </div>
+        {% endif %}
+    </div><!-- /.box-body -->
+
+    <div class="box-footer">
+        <div class="input-group">
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-primary btn-flat margin save">Закрыть</button>
+          </span>
+        </div>
+    </div><!-- /.box-footer-->
+</div><!--/.direct-chat -->
+<div class="test"></div>
+{% block javascripts %}
+<script type="text/javascript">
+
+    $(".save").click(function(){
+        $(".loading_ajax").fadeIn(100);
+        var url = "{{ path('bin_new') }}";
+        var data = {
+                        'save'    : 1,
+                        'is_free' : {% if is_free is defined %} {{is_free}} {% else %} 0 {% endif %}
+                    };
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            success: function(data){
+                console.log(data);
+                if (data == 'failed') {
+                    sweetAlert("Ошибка", "В корзине нет товаров!", "error");
+                } else {
+                    swal("Заказ успешно выполнен","", "success");
+                    $(".direct-chat-messages").html("");
+                    $(".total").html("");
+                }
+                $(".loading_ajax").fadeOut(100);
+            },
+            error: function(data) {
+                if (data.status == '404'){
+                    sweetAlert("Ошибка", data.responseText, "error");
+                    $(".loading_ajax").fadeOut(100);
+                } else {
+                    sweetAlert("Ошибка", "Возникла какая-то ошибка, попробуйте еще раз", "error");
+                }
+                
+            }
+        });
+    });
+
+    $(".fa-close").on("click", function(){
+        $(".loading_ajax").fadeIn(100);
+        var url = "{{ path('bin_delete') }}";
+        var data = {
+                        'delete' : 1,
+                        'id'     : $(this).data("id")
+                    };
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            success: function(data){
+                $(".card").html(data);
+                $(".loading_ajax").fadeOut(100);
+            },
+            error: function(data) {
+                sweetAlert("Ошибка", "Возникла какая-то ошибка, попробуйте еще раз", "error");
+            }
+        });
+    });
+</script>
+{% endblock %}

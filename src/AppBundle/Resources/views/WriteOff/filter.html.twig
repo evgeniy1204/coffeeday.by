@@ -1,0 +1,60 @@
+{% if writeOffsIsGroup is defined %}
+<div class="col-xs-12">
+	<div class="box">
+	<p>Общие данные для выгрузки в Exel</p>
+    	<div class="box-body table-responsive no-padding">
+        	<table class="table table-hover">
+				<thead>
+				    <tr>
+				        <th>Id</th>
+				        <th>Наименование</th>
+				        <th>Количество</th>
+				    </tr>
+				</thead>
+				<tbody>
+					{% for item in writeOffsIsGroup %}
+					    <tr>
+					        <td>{{ item.0.id }}</td>
+					        <td>{{ item.0.stock.ingredient.name }}</td>
+					        <td>{{ item.count_prod }} {{ item.0.stock.ingredient.type }}</td> 
+					    </tr>
+					{% endfor %}
+				</tbody>
+			</table>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if writeOffs is defined %}
+<div class="col-xs-12">
+	<div class="box">
+	<p>Подробные данные</p>
+    	<div class="box-body table-responsive no-padding">
+        	<table class="table table-hover">
+				<thead style="margin-top: 50px;">
+				    <tr>
+				        <th>Id</th>
+				        <th>Наименование</th>
+				        <th>Количество</th>
+				        <th>Комментарий</th>
+				        <th>Бариста</th>
+				    </tr>
+				</thead>
+				<tbody>
+					{% for writeOff in writeOffs %}
+					    <tr>
+					        <td>{{ writeOff.id }}</td>
+					        <td>{{ writeOff.stock.ingredient.name }}</td>
+					        <td>{{ writeOff.count }} {{ writeOff.stock.ingredient.type }}</td> 
+					        <td>{{ writeOff.comment }}</td>
+					        <td>{{ writeOff.user.name }} {{ writeOff.user.surname }}</td>
+					    </tr>
+					{% endfor %}
+				</tbody>
+			</table>
+        </div>
+    </div>
+</div>
+{% endif %}
+

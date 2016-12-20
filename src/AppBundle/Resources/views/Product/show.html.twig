@@ -1,0 +1,52 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block content %}
+<section class="content-header">
+    <h1>
+        {{ product.name }}
+    </h1>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="box box-widget widget-user-2">
+                <div class="widget-user-header bg-yellow">
+                  <h3 class="widget-user-username">{{ product.name }}</h3>
+                </div>
+                <div class="box-footer no-padding">
+                  <ul class="nav nav-stacked">
+                    <li><a href="#">Стоимость <span class="pull-right badge bg-blue">{{ product.cost }}</span></a></li>
+                    <li><a href="#">Продано <span class="pull-right badge bg-aqua"> {% if sales %} {{ sales|length }} {% else %} 0 {% endif %}  </span></a></li>
+                  </ul>
+                </div>
+                <div class="btn-group">
+                    {{ form_start(delete_form) }}
+                        <button class="btn btn-danger btn-flat margin">Удалить</button>
+                    {{ form_end(delete_form) }}
+                </div>
+              </div><!-- /.widget-user -->
+            </div>
+            <div class="col-md-8">
+                <h4>Рецепт</h4>
+                {% if recepts is empty %}
+                 <a href="{{ path('recept_new') }}"><button class="btn btn-info btn-flat margin">Добавить рецепт</button></a>
+                {% endif %}
+                {% for name, recept in recepts %}
+                      <div class="box box-default">
+                        <div class="box-body">
+                        <ul>
+                       {% for item in recept.recept %}
+                           <li> {{ item.ingredient }}({{ item.type }}) - {{ item.count }} </li>
+                       {% endfor %}
+                       </ul>
+                       <p>Стоимость: {{recept.cost }}  </p>
+                       <div class="box-footer">
+                         <a href="{{ path('product_edit', {'id':product.id}) }}"><button class="btn btn-info btn-flat margin">Редактирвоать</button></a>
+                       </div>
+                        </div><!-- /.box-body -->
+                      </div><!-- /.box -->
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

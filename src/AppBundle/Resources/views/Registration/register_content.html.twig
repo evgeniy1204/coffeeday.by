@@ -1,0 +1,48 @@
+{# Content Header (Page header) #}
+<div class="container-fluid-full">
+    <div class="row-fluid">
+        <div class="row-fluid">
+            <div class="login-box register-box">
+                <div class="icons">
+                    <a href=""><i class="halflings-icon home"></i></a>
+                </div>
+                <h2>Register to yourself account</h2>
+                 {% trans_default_domain 'FOSUserBundle' %}
+                    {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
+                        <div class="input-prepend" title="Имя">
+                            <span class="add-on"><i class="halflings-icon user"></i></span>
+                            
+                        </div>
+                        <div class="input-prepend" title="Фамилия">
+                            <span class="add-on"><i class="halflings-icon user"></i></span>
+                          
+                        </div>
+                        <div class="input-prepend" title="Логин">
+                            <span class="add-on"><i class="halflings-icon user"></i></span>
+                            {{ form_widget(form.username, {'attr': {'placeholder': 'Логин', 'class': 'input-large span10'}}) }}
+                        </div>
+                        <div class="input-prepend" title="Email">
+                            <span class="add-on"><i class="halflings-icon user"></i></span>
+                            {{ form_widget(form.email, {'attr': {'placeholder': 'Email', 'class': 'input-large span10'}}) }}
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="input-prepend" title="Пароль">
+                            <span class="add-on"><i class="halflings-icon lock"></i></span>
+                            {{ form_widget(form.plainPassword.first, {'attr': {'placeholder': 'Пароль', 'class': 'input-large span10'}}) }}
+                        </div>
+                        <div class="input-prepend" title="Повторите пароль">
+                            <span class="add-on"><i class="halflings-icon lock"></i></span>
+                            {{ form_widget(form.plainPassword.second, {'attr': {'placeholder': 'Повторите пароль', 'class': 'input-large span10'}}) }}
+                        </div>
+                        <div class="input-prepend">
+                            <div class="button-login">
+                             <input type="submit" value="{{ 'Регистрация'|trans }}" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    {{ form_end(form) }}
+                        <div class="clearfix"></div>
+                </form>
+            </div><!--/span-->
+        </div><!--/row-->
+    </div><!--/.fluid-container-->
+</div><!--/fluid-row-->

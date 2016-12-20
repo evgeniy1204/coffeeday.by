@@ -1,0 +1,57 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block content %}
+<section class="content-header">
+  <h1>
+    Добавление нового рецепта
+  </h1>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-info">
+                <div class="box-body">
+                    
+                        {{ form_start(form) }}
+                            {{ form_widget(form) }}
+                        {{ form_end(form) }}
+                </div>
+                <div class="box-footer">
+                    <button type="text"  class="btn btn-info pull-right  btn-flat margin send">Добавить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="recept">
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    $(".send").click(function(){
+        var url = "{{ path('recept_new') }}";
+        var data = {
+                        'recept': {
+                                    'products'    : $("#recept_products").val(),
+                                    'ingredient'  : $("#recept_ingredient").val(),
+                                    'count'       : $("#recept_count").val()
+                                  }
+                    };
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            success: function(data){
+                $(".recept").html(data);
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        });
+    });
+</script>
+{% endblock %}

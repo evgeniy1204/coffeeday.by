@@ -1,0 +1,62 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block content %}
+ <section class="content-header">
+  <h1>
+    Списанные товары
+  </h1>
+</section>
+{% if is_granted('ROLE_ADMIN') %} 
+<div class="row">
+    <div class="col-lg-12">
+        <a href="{{path('writeoff_index_exel')}}"><button class="btn btn-info btn-flat margin">Фильтр списанных товаров с выгрузкой в Exel</button></a>
+    </div>
+</div>
+ {% endif %}
+<div class="loading_ajax">
+  <i class="fa fa-refresh fa-spin"></i>
+</div>
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Наименование</th>
+                                <th>Количество</th>
+                                <th>Комментарий</th>
+                                <th>Списан</th>
+                                <th>Бариста</th>
+                                <th>Бар</th>
+                                {% if is_granted('ROLE_ADMIN') %} <th> Действия </th> {% endif %}
+                            </tr>
+                        </thead>
+                        <tbody class="write_off">
+                        {% for writeOff in writeOffs %}
+                            <tr>
+                                <td>{{ writeOff.id }}</td>
+                                <td>{{ writeOff.stock.ingredient.name }}</td>
+                                <td>{{ writeOff.count }} {{ writeOff.stock.ingredient.type }}</td>
+                                <td>{{ writeOff.comment }}</td>
+                                <td>{% if writeOff.created %}{{ writeOff.created|date('Y-m-d H:i:s') }}{% endif %}</td>
+                                <td> {{ writeOff.user.name }} {{ writeOff.user.surname }} </td>
+                                <td>{{ writeOff.stock.bar.title }}</td>
+                                {% if is_granted('ROLE_ADMIN') %} 
+                                    <td>
+                                        <a href="{{ path('writeoff_edit', { 'id': writeOff.id }) }}"> <button class="btn bg-navy btn-flat margin">Редактировать</button> </a>
+                                    </td> 
+                                {% endif %}
+
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

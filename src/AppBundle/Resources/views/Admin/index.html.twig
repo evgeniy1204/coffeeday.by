@@ -1,0 +1,74 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block content %}
+<section class="content-header">
+  <h1>
+    CRM Coffee
+  </h1>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-lg-12">
+        {% if is_granted('ROLE_ADMIN') %}
+          <div class="col-md-4 col-sm-6 col-xs-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-yellow fa fa-users"></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Количество барист</span>
+                  <span class="info-box-number"> {{ users|length }} </span>
+                </div><!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-green fa fa-shopping-cart"></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Количество проданных товаров</span>
+                  <span class="info-box-number"> {{ bins|length }} </span>
+                </div><!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-aqua fa fa-money"></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Общий заработок</span>
+                  <span class="info-box-number"> {{ earning }} </span>
+                </div><!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div>
+        {% endif %}
+        </div>
+    </div>
+    {% if is_granted('ROLE_ADMIN') %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title">Данные о входах в систему</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body no-padding">
+                  <table class="table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Бариста</th>
+                        <th>Бар</th>
+                        <th>Время захода</th>
+                    </tr>
+                    {% for user in users %}
+                        <tr>
+                            <td><a href="{{ path('user_show', { 'id': user.id }) }}">{{ user.id }}</a></td>
+                            <td><a href="{{ path('user_show', { 'id': user.id }) }}">{{ user.name }} {{ user.surname }}</a></td>
+                            <td>{% if user.bar %}  {{ user.bar.title }}{% endif %}</td>
+                            <td>{% if user.lastLogin %}{{ user.lastLogin|date('Y-m-d H:i:s') }}{% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                  </table>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        </div>
+    </div>
+    {% endif %}
+</section>
+
+{% endblock %}
